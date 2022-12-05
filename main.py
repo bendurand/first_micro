@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/', methods=["GET"])
-def hello_world():
+@app.route('/', methods=["GET","POST"])
+def home():
     prefix_google = """
     <!-- Google tag (gtag.js) -->
     <script async
@@ -16,4 +16,12 @@ def hello_world():
     gtag('config', ' UA-250909573-1');
     </script>
     """
-    return prefix_google + "Hello World"
+    if request.method == 'POST':
+        if request.form.get('action1') == 'VALUE1':
+            pass # do something
+        else:
+            pass # unknown
+    elif request.method == 'GET':
+        return render_template('home.html')
+    
+    return prefix_google + render_template("home.html")
