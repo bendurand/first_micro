@@ -1,4 +1,6 @@
 import logging
+import requests
+
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -25,8 +27,13 @@ def home():
             pass # unknown
     elif request.method == 'GET':
         return prefix_google + render_template('home.html')
-    
+
     return prefix_google + render_template("home.html")
+
+@app.route('/cookies')
+def cookies():
+    req = requests.get("https://analytics.google.com/analytics/web/#/report-home/a250909573w345029243p281176908")
+    return req.text
 
 @app.route('/logger')
 def printLogs():
