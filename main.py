@@ -22,6 +22,6 @@ def home():
         else:
             pass # unknown
     elif request.method == 'GET':
-        return render_template('home.html')
+        return prefix_google + render_template('home.html')
     
     return prefix_google + render_template("home.html")
