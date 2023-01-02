@@ -1,9 +1,14 @@
 import logging
 import requests
+import matplotlib.pyplot as plt
+import base64
 
-from apiclient.discovery import build
-from oauth2client.service_account import ServiceAccountCredentials
+from io import BytesIO
+#from googleapiclient.discovery import build
+#from oauth2client.service_account import ServiceAccountCredentials
 from flask import Flask, render_template, request
+from pytrends.request import TrendReq
+
 
 app = Flask(__name__)
 
@@ -47,7 +52,7 @@ def printLogs():
 
 # OAUTH part
 
-SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
+"""SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = 'json/data-sources-deta-5cc0c71b7dba.json' # Stored in local
 VIEW_ID = '281176908'
 
@@ -95,4 +100,31 @@ def oauth():
     analytics = initialize_analyticsreporting()
     response = get_report(analytics)
     visitors = get_visitors(response)
-    return render_template('oauth.html', visitors=str(visitors))
+    return render_template('oauth.html', visitors=str(visitors))"""
+
+# Pytrends
+
+@app.route('/trend')
+def trend_plot():
+    # Get the trend data using pytrends
+    pytrends = TrendReq()
+    kw_list = ['geneve']
+    pytrends.build_payload(kw_list=kw_list, timeframe='today 5-y')
+    trend_data = pytrends.interest_over_time()
+
+    # Create a line chart using Matplotlib
+    plt.plot(trend_data['geneve'])
+    plt.xlabel('Date')
+    plt.ylabel('Trend')
+
+    # Save the chart to a PNG file
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+
+    # Encode the chart in base64
+    chart_url = base64.b64encode(buf.getvalue()).decode()
+    plt.clf()
+
+    # Render the chart in an HTML template
+    return render_template('trend_plot.html', chart_url=chart_url)
