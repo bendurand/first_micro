@@ -52,7 +52,8 @@ def printLogs():
 
 # OAUTH part
 
-"""SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
+"""
+SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = 'json/data-sources-deta-5cc0c71b7dba.json' # Stored in local
 VIEW_ID = '281176908'
 
@@ -100,7 +101,8 @@ def oauth():
     analytics = initialize_analyticsreporting()
     response = get_report(analytics)
     visitors = get_visitors(response)
-    return render_template('oauth.html', visitors=str(visitors))"""
+    return render_template('oauth.html', visitors=str(visitors))
+"""
 
 # Pytrends
 
