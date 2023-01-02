@@ -2,6 +2,7 @@ import time
 from collections import Counter
 import plotly.graph_objects as go
 import pandas as pd
+import numpy as np
 from plotly.offline import plot
 
 def log_execution_time(func):
@@ -57,3 +58,5 @@ def get_trend_series():
 if __name__ == '__main__':
     serie1, serie2 = get_trend_series()
     fig_trend_series(serie1, serie2, 'Dictionary', 'Counter').show()
+    print('Mean time taken dictionary method : ',np.mean(serie1),' seconds')
+    print('Mean time taken counter method : ',np.mean(serie2),' seconds')
